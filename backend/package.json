@@ -1,0 +1,69 @@
+{
+  "name": "tasky-backend",
+  "version": "1.0.0",
+  "description": "A backend for tasky!",
+  "main": "src/index.js",
+  "scripts": {
+    "build": "tsc",
+    "dev": "nodemon --watch './src/**/*.ts' --exec 'ts-node' ./src/index.ts",
+    "start": "tsc && node ./dist/index.js",
+    "lint": "eslint --ext .ts ./src",
+    "lint:fix": "eslint --fix --ext .ts ./src",
+    "format": "prettier --ignore-path .gitignore --write \"src/**/*.ts\"",
+    "test": "jest --runInBand",
+    "test:watch": "jest --runInBand --watch",
+    "type-check": "tsc --noEmit"
+  },
+  "author": "Adam Jacob <adam@systeminit.com>",
+  "license": "Apache 2",
+  "dependencies": {
+    "@koa/cors": "^3.3.0",
+    "@koa/router": "^10.1.1",
+    "koa": "^2.13.4",
+    "koa-bodyparser": "^4.3.0",
+    "koa-json": "^2.0.2",
+    "koa-logger": "^3.2.1",
+    "yup": "^0.32.11"
+  },
+  "devDependencies": {
+    "@types/jest": "^27.5.2",
+    "@types/koa": "^2.13.4",
+    "@types/koa__cors": "^3.3.0",
+    "@types/koa__router": "^8.0.11",
+    "@types/koa-bodyparser": "^4.3.7",
+    "@types/koa-json": "^2.0.20",
+    "@types/koa-logger": "^3.1.2",
+    "@types/node": "^17.0.38",
+    "@types/supertest": "^2.0.12",
+    "@typescript-eslint/eslint-plugin": "^5.27.0",
+    "@typescript-eslint/parser": "^5.27.0",
+    "eslint": "^8.16.0",
+    "eslint-config-prettier": "^8.5.0",
+    "jest": "^28.1.0",
+    "nodemon": "^2.0.16",
+    "prettier": "^2.6.2",
+    "supertest": "^6.2.3",
+    "ts-jest": "^28.0.3",
+    "ts-node": "^10.8.0",
+    "typescript": "^4.7.2"
+  },
+  "jest": {
+    "moduleFileExtensions": [
+      "js",
+      "jsx",
+      "json",
+      "ts",
+      "tsx"
+    ],
+    "transform": {
+      "\\.ts$": "ts-jest"
+    },
+    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(js|ts)x?$",
+    "testPathIgnorePatterns": [
+      "/node_modules/",
+      "/dist/",
+      "/build/",
+      "/coverage/"
+    ]
+  }
+}

@@ -1,0 +1,20 @@
+{
+    "compilerOptions": {
+        "outDir": "./dist",
+        "rootDir": "./src",
+        "lib": ["es5", "es6"],
+        "target": "es6",
+        "module": "commonjs",
+        "moduleResolution": "node",
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true,
+        "sourceMap": true,
+        "strict": true,
+        "strictNullChecks": true,
+        "strictFunctionTypes": false
+    },
+    "exclude": [
+        "node_modules",
+        "tests",
+    ]
+}
