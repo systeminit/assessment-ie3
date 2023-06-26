@@ -15,8 +15,8 @@ We created a fake company called Taskly, and you’ve been hired as the first In
 
 Taskly is split into two components - a `frontend` and a `backend`. Each component has its own README with information about the components, including full instructions on how to run it (including link checks and automated tests).
 
-To get started, [fork this repository](https://docs.github.com/en/get-started/quickstart/fork-a-repo). If you prefer, you can make your fork private and add `adamhjk`,
-`fnichol`, and `mahirl` as collaborators. When you've finished, let us know
+To get started, [fork this repository](https://docs.github.com/en/get-started/quickstart/fork-a-repo). If you prefer, you can make your fork private and add `britmyerss`,
+`fnichol`, `stack72`, and `mahirl` as collaborators. When you've finished, let us know
 via email, with a link to your fork. We'll review it and get back to you!
 
 Have fun!
