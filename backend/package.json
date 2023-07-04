@@ -7,9 +7,11 @@
     "build": "tsc",
     "dev": "nodemon --watch './src/**/*.ts' --exec 'ts-node' ./src/index.ts",
     "start": "tsc && node ./dist/index.js",
+    "start:built": "node ./dist/index.js",
     "lint": "eslint --ext .ts ./src",
     "lint:fix": "eslint --fix --ext .ts ./src",
     "format": "prettier --ignore-path .gitignore --write \"src/**/*.ts\"",
+    "format-check": "prettier --ignore-path .gitignore \"src/**/*.ts\"",
     "test": "jest --runInBand",
     "test:watch": "jest --runInBand --watch",
     "type-check": "tsc --noEmit"

@@ -1,0 +1,73 @@
+VERSION 0.7
+
+node:
+  FROM node:18.16-slim
+
+cp-config:
+  FROM +node
+  WORKDIR /opt/app/backend
+
+  COPY ./package-lock.json ./package.json .
+
+npmi:
+  FROM +cp-config
+  RUN npm ci
+
+# mainly to reduce the image size
+npmi-prod:
+  FROM +cp-config
+  ENV NODE_ENV=production
+  RUN npm ci
+
+src:
+  FROM +npmi
+
+  COPY . .
+
+test:
+  FROM +src
+
+  RUN npm run lint
+  RUN npm run type-check
+  RUN npm run format-check
+  RUN npm run test
+
+image-build:
+  # not start from +test in case +test produce artifacts
+  FROM +src
+  RUN npm run build
+  SAVE ARTIFACT dist
+
+image:
+  FROM +npmi-prod
+  COPY . .
+  COPY +image-build/dist ./dist
+
+  ENTRYPOINT ["npm", "run", "start:built"]
+  EXPOSE 3030
+  SAVE IMAGE backend
+
+dind:
+  FROM earthly/dind:alpine
+  RUN apk add --update curl
+
+integration-tester:
+  FROM +dind
+
+  WITH DOCKER --load +image
+    RUN docker run --detach --publish=3030:3030 backend:latest \
+      && sleep 20 \
+      && curl localhost:3030/api/users
+  END
+
+build:
+  BUILD +test
+  BUILD --platform=linux/amd64 --platform=linux/arm64 +image
+
+integration-test:
+  BUILD +build
+  BUILD +integration-tester
+
+all:
+  BUILD +integration-test
+  BUILD --platform=linux/amd64 --platform=linux/arm64 +image
