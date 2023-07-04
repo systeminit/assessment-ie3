@@ -1,0 +1,10 @@
+:80 {
+  handle /api/* {
+    reverse_proxy {$BACKEND_URL}
+  }
+
+  handle {
+    root * /dist
+    file_server
+  }
+}

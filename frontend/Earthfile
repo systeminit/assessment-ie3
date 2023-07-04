@@ -1,0 +1,64 @@
+VERSION 0.7
+
+node:
+  FROM node:18.16-slim
+
+npmi:
+  FROM +node
+  WORKDIR /opt/app/frontend
+
+  COPY ./package-lock.json ./package.json .
+  RUN npm ci
+
+src:
+  FROM +npmi
+
+  COPY . .
+
+test:
+  FROM +src
+
+  RUN npm run lint
+  RUN npm run type-check
+
+image-build:
+  # not start from +test in case +test produce artifacts
+  FROM +src
+  RUN npm run build-only
+
+  SAVE ARTIFACT ./dist # AS LOCAL ./dist
+
+# use caddy for smaller image as well as performance advantages
+image:
+  FROM caddy:2.6-alpine
+
+  COPY ./Caddyfile /etc/caddy/Caddyfile
+
+  COPY +image-build/dist /dist
+
+  SAVE IMAGE frontend
+
+dind:
+  FROM earthly/dind:alpine
+  RUN apk add --update curl
+
+integration-tester:
+  FROM +dind
+
+  WITH DOCKER --load +image
+    RUN docker run --detach --publish=8080:80 frontend:latest \
+      && sleep 3 \
+      && curl localhost:8080
+  END
+
+build:
+  BUILD +test
+  BUILD --platform=linux/amd64 --platform=linux/arm64 +image
+
+integration-test:
+  BUILD +build
+  BUILD +integration-tester
+
+all:
+  BUILD +integration-test
+  BUILD --platform=linux/amd64 --platform=linux/arm64 +image
