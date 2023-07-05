@@ -53,7 +53,7 @@ integration-tester:
 
 build:
   BUILD +test
-  BUILD --platform=linux/amd64 --platform=linux/arm64 +image
+  BUILD +image
 
 integration-test:
   BUILD +build
@@ -61,4 +61,4 @@ integration-test:
 
 all:
   BUILD +integration-test
-  BUILD --platform=linux/amd64 --platform=linux/arm64 +image
+  BUILD +image
