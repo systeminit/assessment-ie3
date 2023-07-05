@@ -4,7 +4,7 @@ on:
   workflow_dispatch: {}
 
 jobs:
-  build:
+  job-destroy:
     runs-on: ubuntu-latest
     env:
       FORCE_COLOR: 1
