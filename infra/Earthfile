@@ -24,7 +24,7 @@ bins:
     && unzip ${TERRAFORM_ZIP_FILE} -d /usr/local/bin \
     && rm ${TERRAFORM_ZIP_FILE}
 
-  RUN curl -fsSLO https://download.docker.com/linux/static/stable/$(printenv TARGETARCH | sed s/arm64/aarch64/)/docker-${DOCKER_VERSION}.tgz \
+  RUN curl -fsSLO https://download.docker.com/linux/static/stable/$(printenv TARGETARCH | sed s/arm64/aarch64/ | sed s/amd64/x86_64/)/docker-${DOCKER_VERSION}.tgz \
     && tar xzvf docker-${DOCKER_VERSION}.tgz --strip 1 \
     -C /usr/local/bin docker/docker \
     && rm docker-${DOCKER_VERSION}.tgz
