@@ -1,4 +1,4 @@
-name: CI
+name: deploy on push to main
 
 on:
   workflow_dispatch: {}

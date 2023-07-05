@@ -1,4 +1,4 @@
-name: CI
+name: build and diff on PR
 
 on:
   workflow_dispatch: {}
