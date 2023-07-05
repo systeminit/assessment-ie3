@@ -1,0 +1,138 @@
+VERSION 0.7
+
+backend:
+  BUILD ../backend+all
+
+frontend:
+  BUILD ../frontend+all
+
+node:
+  FROM node:18.16-slim
+  RUN apt update && apt install -y ca-certificates curl
+
+bins:
+  FROM alpine:3.18
+  ARG TARGETARCH
+  WORKDIR /opt/place-bins
+
+  ENV DOCKER_VERSION=24.0.2
+  ENV TERRAFORM_VERSION=1.5.2
+  ENV TERRAFORM_ZIP_FILE=terraform_${TERRAFORM_VERSION}_linux_${TARGETARCH}.zip
+  RUN apk -u add curl unzip
+
+  RUN curl -fsSLO https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/${TERRAFORM_ZIP_FILE} \
+    && unzip ${TERRAFORM_ZIP_FILE} -d /usr/local/bin \
+    && rm ${TERRAFORM_ZIP_FILE}
+
+  RUN curl -fsSLO https://download.docker.com/linux/static/stable/$(printenv TARGETARCH | sed s/arm64/aarch64/)/docker-${DOCKER_VERSION}.tgz \
+    && tar xzvf docker-${DOCKER_VERSION}.tgz --strip 1 \
+    -C /usr/local/bin docker/docker \
+    && rm docker-${DOCKER_VERSION}.tgz
+
+  SAVE ARTIFACT /usr/local/bin/docker docker
+  SAVE ARTIFACT /usr/local/bin/terraform terraform
+
+
+cdktf:
+  FROM +node
+  ARG TARGETARCH
+  WORKDIR /opt/cdktf
+
+  COPY +bins/docker /usr/local/bin
+  COPY +bins/terraform /usr/local/bin
+
+  RUN npm i -g cdktf-cli
+
+  ENTRYPOINT ["cdktf"]
+
+npm-cache:
+  FROM +node
+  WORKDIR /build-node-modules
+
+  COPY ./fly.io/package.json ./fly.io/package-lock.json ./
+
+  RUN npm install
+
+  SAVE ARTIFACT ./node_modules node_modules
+  SAVE ARTIFACT ./package-lock.json package-lock.json
+
+cdktf-get-cache:
+  FROM +npm-cache
+
+  COPY +bins/terraform /usr/local/bin
+
+  RUN npm install -g cdktf-cli
+
+  COPY ./fly.io ./
+
+  RUN npm run lint
+  RUN cdktf get
+
+  SAVE ARTIFACT ./.gen .gen
+
+cdktf-synth:
+  FROM earthly/dind:alpine
+
+  WORKDIR /opt/cdktf
+
+  COPY docker-compose.cdktf.yml .
+  COPY --dir fly.io ./
+  COPY --dir +npm-cache/node_modules ./fly.io
+  COPY +npm-cache/package-lock.json ./fly.io
+  COPY --dir +cdktf-get-cache/.gen ./fly.io
+
+  # run cdktf synth to verify
+  WITH DOCKER --load earthly_cdktf:latest=+cdktf
+    RUN docker-compose -f docker-compose.cdktf.yml run --rm cdktf synth
+  END
+
+# specifying platform to work with the platform restriction with fly.io regardless of the platform of the runner
+backend-amd64:
+  FROM --platform=linux/amd64 ../backend+image
+  SAVE IMAGE backend:latest_linux_amd64
+
+frontend-amd64:
+  FROM --platform=linux/amd64 ../frontend+image
+  SAVE IMAGE frontend:latest_linux_amd64
+
+build-debug:
+  FROM +cdktf-synth
+  ARG subcommand=diff
+  ARG AWS_REGION
+  ARG AWS_S3_ENDPOINT
+
+  WITH DOCKER \
+    --load earthly_cdktf:latest=+cdktf \
+    --load backend:latest_linux_amd64=+backend-amd64 \
+    --load frontend:latest_linux_amd64=+frontend-amd64
+    RUN docker inspect backend:latest_linux_amd64 && printenv
+  END
+
+cdktf-run:
+  FROM +cdktf-synth
+  ARG subcommand=diff
+  ARG AWS_REGION
+  ARG AWS_S3_ENDPOINT
+
+  WITH DOCKER \
+    --load earthly_cdktf:latest=+cdktf \
+    --load backend:latest_linux_amd64=+backend-amd64 \
+    --load frontend:latest_linux_amd64=+frontend-amd64
+    RUN --no-cache \
+      --secret FLY_API_TOKEN \
+      --secret AWS_ACCESS_KEY_ID \
+      --secret AWS_SECRET_ACCESS_KEY \
+      docker-compose -f docker-compose.cdktf.yml run --rm cdktf $subcommand --auto-approve
+  END
+
+debug:
+  BUILD +build-debug
+
+diff:
+  BUILD +cdktf-run --subcommand=diff
+
+destroy:
+  BUILD +cdktf-run --subcommand=destroy
+
+deploy:
+  BUILD +cdktf-run --subcommand=deploy

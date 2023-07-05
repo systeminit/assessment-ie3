@@ -1,0 +1,15 @@
+version: '3.8'
+services:
+  cdktf:
+    # image will be built by ./Earthfile
+    image: earthly_cdktf:latest
+    working_dir: /opt/app/cdktf/fly.io
+    volumes:
+    - ./fly.io:/opt/app/cdktf/fly.io:rw
+    - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+    - AWS_REGION
+    - AWS_S3_ENDPOINT
+    - AWS_SECRET_ACCESS_KEY
+    - AWS_ACCESS_KEY_ID
+    - FLY_API_TOKEN

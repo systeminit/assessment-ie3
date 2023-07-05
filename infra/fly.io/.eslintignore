@@ -1,0 +1,4 @@
+**/cdktf.out
+setup.js
+__tests__/main-test.ts
+jest.config.js

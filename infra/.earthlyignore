@@ -1,0 +1,4 @@
+./fly.io/node_modules
+./fly.io/cdktf.out
+!./fly.io/cdktf.out/manifest.json
+!./fly.io/cdktf.out/stacks/fly.io/.terraform.lock.hcl

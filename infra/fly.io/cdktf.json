@@ -1,0 +1,13 @@
+{
+  "language": "typescript",
+  "app": "npx ts-node main.ts",
+  "projectId": "344d1b82-ccd0-4e85-9923-862feb350007",
+  "sendCrashReports": "true",
+  "terraformProviders": [
+    "hashicorp/random@ ~> 3.5.1",
+    "kreuzwerker/docker@ ~> 3.0.2",
+    "fly-apps/fly@ ~> 0.0.23"
+  ],
+  "terraformModules": [],
+  "context": {}
+}
