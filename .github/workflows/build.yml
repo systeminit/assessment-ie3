@@ -1,0 +1,27 @@
+name: CI
+
+on:
+  workflow_dispatch: {}
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      FORCE_COLOR: 1
+    steps:
+    - uses: earthly/actions-setup@v1
+    - uses: actions/checkout@v2
+    - name: Earthly version
+      run: earthly --version
+    - name: Run build
+      run: make build
+    - name: Run diff
+      run: make diff
+      env:
+        AWS_REGION: ${{ vars.AWS_REGION }}
+        AWS_S3_ENDPOINT: ${{ vars.AWS_S3_ENDPOINT }}
+        FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
