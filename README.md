@@ -1,44 +1,39 @@
-# Infrastructure Engineer 3 Take-Home Assessment
+# John Watson - Infrastructure Engineer Technical Test - systeminit
 
-This is the repository for the System Initiative Infrastructure Engineer III take-home assessment. It is designed to verify that:
+## Overview
 
-* You have proficiency in designing and implementing CI/CD pipelines
-* You have proficiency in deploying a containerized application
+ This test aims to build, validate, containerize, and deploy a backend and frontend service to a cloud platform. 
 
-We use a take-home assessment so that you can have your most productive environment at hand. Use whatever editor, operating system, etc. you like. Google to your heart's content. 
+## Approach
 
-Please spend no more than 4 hours on this assessment. 
+I have broken the approach into three sections: Development Flow, Continuous Integration and then finally Continuous Delivery. 
 
-## What you'll be doing
+Hopefully this makes it easier to follow the path I have taken. I have also outlined the reasoning behind each of the bullets in the below list, along with the PR(s) that added that functionality if that helps.
 
-We created a fake company called Taskly, and you’ve been hired as the first Infrastructure Engineer! Taskly is a new company that’s reinventing the task list, and the engineering team has been busy working toward a beta-launch. They’re ready to get this product into the world and start getting feedback! We want you to build a CI/CD pipeline that deploys Taskly into a cloud environment.  
+## Path Checklist
 
-Taskly is split into two components - a `frontend` and a `backend`. Each component has its own README with information about the components, including full instructions on how to run it (including link checks and automated tests).
+1. Development Flow: Branch protection, code integrity, and establish development flow:
+   - [ ] Add to README.md with details of the task
+   - [ ] Setup branch restrictions/push policies
+   - [ ] Setup precommit
+   - [ ] Setup semantic release
 
-To get started, [fork this repository](https://docs.github.com/en/get-started/quickstart/fork-a-repo). If you prefer, you can make your fork private and add `britmyerss`,
-`fnichol`, `stack72`, and `mahirl` as collaborators. When you've finished, let us know
-via email, with a link to your fork. We'll review it and get back to you!
+2. CI (Continuous Integration): Build, Test, and Release flow:
+   - [ ] Build + Containerize the applications, with local deployment validation
+   - [ ] Initiate tests in CI 
+     - [ ] Lint
+     - [ ] Unit Test
+     - [ ] Security Scan
+     - [ ] SBOM Generation
+   - [ ] Initiate release flow to an Artifact Registry
+   - [ ] Register the service with the Artifact Database
 
-Have fun!
+3. CD (Continuous Delivery): Deploying the Applications
+   - [ ] Establish some baseline/basic IaC for environments
+   - [ ] Automatic validation environment for development branches
+   - [ ] Development environment establishment with Artifact metadata validation
 
+## Considerations
 
-## How you'll be building it
+TODO: List considerations for users of the repository.
 
-Your implementation should, at minimum, include: 
-
-* running lint checks
-* tests
-* building each component as a container image
-* running those containers in the cloud
-
-We want you to use whatever tools and cloud provider you’re most comfortable with. However, please stick to the free tiers or use mock APIs, as we don’t want you paying anything out of pocket for this! 
-
-We also want you to include a README, that tells us how you’ve designed your solution and how it works. 
-
-Upon completion, we will fork your repo, open a pull request, and see your pipeline in action! 
-
-
-# Good luck!
-
-Thank you so much for taking the time to do the assessment. We're looking forward
-to reviewing your work!
