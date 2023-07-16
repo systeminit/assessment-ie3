@@ -1,7 +1,7 @@
 {
-  "name": "tasky-backend",
+  "name": "taskly-backend",
   "version": "1.0.0",
-  "description": "A backend for tasky!",
+  "description": "A backend for taskly!",
   "main": "src/index.js",
   "scripts": {
     "build": "tsc",

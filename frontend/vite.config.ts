@@ -13,7 +13,7 @@ export default defineConfig({
   },
   server: {
     proxy: {
-      "/api": "http://localhost:3030",
+      "/api": process.env.TASKLY_API_URL || "http://localhost:3030",
     },
   },
 });

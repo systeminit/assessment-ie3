@@ -1,0 +1,25 @@
+---
+name: taskly
+services:
+  frontend:
+    build:
+      context: ./frontend
+    command: ["npm", "run", "dev"]
+    environment:
+      TASKLY_API_URL: "http://backend:3030"
+    volumes:
+      - type: bind
+        source: ./frontend/src
+        target: /taskly-frontend/src
+    ports:
+      - "3000:3000"
+  backend:
+    build:
+      context: ./backend
+    command: ["npm", "run", "dev"]
+    volumes:
+      - type: bind
+        source: ./backend/src
+        target: /taskly-backend/src
+    ports:
+      - "3030:3030"
