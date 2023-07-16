@@ -1,0 +1,13 @@
+---
+name: taskly
+services:
+  ui:
+    build:
+      context: ./frontend
+    command: ["npm", "run", "dev"]
+    volumes:
+      - type: bind
+        source: ./frontend/src
+        target: /taskly-ui/src
+    ports:
+      - "3000:3000"
