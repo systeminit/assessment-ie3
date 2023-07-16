@@ -1,44 +1,45 @@
-# Infrastructure Engineer 3 Take-Home Assessment
+# Taskly
 
-This is the repository for the System Initiative Infrastructure Engineer III take-home assessment. It is designed to verify that:
+Taskly is an application that allows users to sign in and create tasks. It is
+also used by [System Initiative](https://www.systeminit.com/) as an
+[assessment](https://github.com/systeminit/assessment-ie3) for their
+Infrastructure Engineer III role.
 
-* You have proficiency in designing and implementing CI/CD pipelines
-* You have proficiency in deploying a containerized application
+## Development
 
-We use a take-home assessment so that you can have your most productive environment at hand. Use whatever editor, operating system, etc. you like. Google to your heart's content. 
+Taskly is split into two components, a `frontend` and a `backend`. These
+components can be run locally using either Docker or npm, each of which support
+hot-reloading for a fast development feedback cycle. For more information about
+each component, refer to its `README.md` in its respective directory.
 
-Please spend no more than 4 hours on this assessment. 
+### Using Docker
 
-## What you'll be doing
+Start both the frontend and backend.
 
-We created a fake company called Taskly, and you’ve been hired as the first Infrastructure Engineer! Taskly is a new company that’s reinventing the task list, and the engineering team has been busy working toward a beta-launch. They’re ready to get this product into the world and start getting feedback! We want you to build a CI/CD pipeline that deploys Taskly into a cloud environment.  
+```sh
+make
+```
 
-Taskly is split into two components - a `frontend` and a `backend`. Each component has its own README with information about the components, including full instructions on how to run it (including link checks and automated tests).
+Access Taskly using the following URLs.
 
-To get started, [fork this repository](https://docs.github.com/en/get-started/quickstart/fork-a-repo). If you prefer, you can make your fork private and add `britmyerss`,
-`fnichol`, `stack72`, and `mahirl` as collaborators. When you've finished, let us know
-via email, with a link to your fork. We'll review it and get back to you!
+- Frontend - http://localhost:3000
+- Backend - http://localhost:3030
 
-Have fun!
+### Using npm
 
+Open a separate terminal and run the frontend.
 
-## How you'll be building it
+```sh
+cd frontend && npm install && npm run dev
+```
 
-Your implementation should, at minimum, include: 
+Open a separate terminal and run the backend.
 
-* running lint checks
-* tests
-* building each component as a container image
-* running those containers in the cloud
+```sh
+cd backend && npm install && npm run dev
+```
 
-We want you to use whatever tools and cloud provider you’re most comfortable with. However, please stick to the free tiers or use mock APIs, as we don’t want you paying anything out of pocket for this! 
+Access Taskly using the following URLs.
 
-We also want you to include a README, that tells us how you’ve designed your solution and how it works. 
-
-Upon completion, we will fork your repo, open a pull request, and see your pipeline in action! 
-
-
-# Good luck!
-
-Thank you so much for taking the time to do the assessment. We're looking forward
-to reviewing your work!
+- Frontend - http://localhost:3000
+- Backend - http://localhost:3030
