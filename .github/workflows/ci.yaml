@@ -1,0 +1,123 @@
+---
+name: Lint, Test, and Build
+
+on:
+  push:
+
+env:
+  NODE_VERSION: 20.4.0
+
+jobs:
+  lint-frontend:
+    name: Lint Frontend
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+      - name: Install Dependencies
+        run: npm clean-install
+        working-directory: frontend
+      - name: Run Lint
+        run: npm run lint
+        working-directory: frontend
+
+  build-frontend:
+    name: Build Frontend
+    needs: ["lint-frontend"]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ vars.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Build Container
+        uses: docker/build-push-action@v4
+        with:
+          context: ./frontend
+          load: true
+          tags: sudomateo/taskly-frontend:${{ github.sha }}
+      - name: Run Trivy Scanner
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: sudomateo/taskly-frontend:${{ github.sha }}
+          format: "table"
+          exit-code: "1"
+          vuln-type: "os"
+          ignore-unfixed: true
+
+  lint-backend:
+    name: Lint Backend
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+      - name: Install Dependencies
+        run: npm clean-install
+        working-directory: backend
+      - name: Run Lint
+        run: npm run lint
+        working-directory: backend
+
+  test-backend:
+    name: Test Backend
+    needs: ["lint-backend"]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+      - name: Install Dependencies
+        run: npm clean-install
+        working-directory: backend
+      - name: Run Test
+        run: npm run test
+        working-directory: backend
+
+  build-backend:
+    name: Build Backend
+    needs: ["test-backend"]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ vars.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Build Container
+        uses: docker/build-push-action@v4
+        with:
+          context: ./backend
+          load: true
+          tags: sudomateo/taskly-backend:${{ github.sha }}
+      - name: Run Trivy Scanner
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: sudomateo/taskly-backend:${{ github.sha }}
+          format: "table"
+          exit-code: "1"
+          vuln-type: "os"
+          ignore-unfixed: true
