@@ -4,22 +4,22 @@
 build:
 	docker compose build
 
-.PHONY: build-ui
-build-ui:
-	docker compose build ui
+.PHONY: build-frontend
+build-frontend:
+	docker compose build frontend
 
-.PHONY: build-api
-build-api:
-	docker compose build api
+.PHONY: build-backend
+build-backend:
+	docker compose build backend
 
 .PHONY: up
 up: build
 	docker compose up
 
-.PHONY: up-ui
-up-ui: build-ui
-	docker compose up ui
+.PHONY: up-frontend
+up-frontend: build-frontend
+	docker compose up frontend
 
-.PHONY: up-api
-up-api: build-api
-	docker compose up api
+.PHONY: up-backend
+up-backend: build-backend
+	docker compose up backend

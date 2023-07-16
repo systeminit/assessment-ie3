@@ -1,5 +1,5 @@
 FROM node:20.4.0
-WORKDIR /taskly-api
+WORKDIR /taskly-backend
 COPY package.json ./package.json
 COPY package-lock.json ./package-lock.json
 RUN npm clean-install
