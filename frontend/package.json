@@ -1,6 +1,7 @@
 {
-  "name": "tasky",
-  "version": "0.0.0",
+  "name": "taskly-frontend",
+  "version": "1.0.0",
+  "description": "A frontend for taskly!",
   "scripts": {
     "dev": "vite --host 0.0.0.0",
     "build": "run-p type-check build-only",
