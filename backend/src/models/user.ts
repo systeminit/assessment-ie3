@@ -1,10 +1,10 @@
-// The user model allows us to create and list users, and 
+// The user model allows us to create and list users, and
 // stores them in memory.
 
-import { object, string, InferType } from 'yup';
+import { object, string, InferType } from "yup";
 import { randomUUID } from "crypto";
 
-// Creates a schema for a user, which we can use to 
+// Creates a schema for a user, which we can use to
 // validate incoming JSON data.
 export const userSchema = object({
   id: string().uuid().required(),
@@ -25,7 +25,7 @@ export type UserCreate = Omit<User, "id">;
 // user id.
 export let users: { [id: string]: User } = {};
 
-// Adds a user to the users object. Creates the ID 
+// Adds a user to the users object. Creates the ID
 // automatically.
 export const usersAdd = (userCreate: UserCreate) => {
   for (const user of Object.values(users)) {
@@ -40,14 +40,14 @@ export const usersAdd = (userCreate: UserCreate) => {
   };
   users[user.id] = user;
   return user;
-}
+};
 
 // Clears all the users
 export const usersClear = () => {
   users = {};
-}
+};
 
 // Lists all the existing users as an array, sorted by name.
 export const usersList = () => {
   return Object.values(users).sort((a, b) => a.name.localeCompare(b.name));
-}
+};

@@ -1,7 +1,7 @@
 // The task model stores the tasks that users create. It stores
 // them in memory - it does not persist.
 
-import { object, string, InferType } from 'yup';
+import { object, string, InferType } from "yup";
 import { randomUUID } from "crypto";
 
 // A schema for our tasks.
@@ -38,12 +38,12 @@ export const tasksAdd = (taskCreate: TaskCreate) => {
     tasks[task.userId] = [task];
   }
   return task;
-}
+};
 
 // Clear all the tasks.
 export const tasksClear = () => {
   tasks = {};
-}
+};
 
 // List all the tasks for a given user.
 export const tasksList = (userId: string) => {
@@ -52,4 +52,4 @@ export const tasksList = (userId: string) => {
   } else {
     return [];
   }
-}
+};
