@@ -4,9 +4,11 @@
 import * as Router from "@koa/router";
 import { createUser, listUsers } from "./handlers/users";
 import { createTask, listTasks } from "./handlers/tasks";
+import { health } from "./handlers/health";
 
 export const router = new Router();
 router.get("/api/users", listUsers);
 router.post("/api/users", createUser);
 router.post("/api/tasks", createTask);
 router.get("/api/tasks/:userId", listTasks);
+router.get("/api/health", health);
